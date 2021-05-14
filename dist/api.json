@@ -1,0 +1,225 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "KFC Holdem",
+    "version": "1.0",
+    "summary": "An API for integrating the KFC Holdem microsite with PromoData",
+    "description": "An API for integrating the KFC Holdem microsite with PromoData",
+    "contact": {
+      "name": "PromoVeritas Digital",
+      "email": "digital@promoveritas.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://0ru6ce2o40.execute-api.eu-west-1.amazonaws.com/beta/kfc-holdem"
+    }
+  ],
+  "paths": {
+    "/verify-codes": {
+      "parameters": [],
+      "post": {
+        "summary": "Verify an array of codes against a code pool",
+        "tags": [
+          "Entrant"
+        ],
+        "operationId": "post-verify-codes-codes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "verificationToken": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "prize": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "verificationToken",
+                    "prize"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "status": "winner",
+                      "verificationToken": "93139981-4f3b-42bb-9cb9-1efd27753dd9",
+                      "prize": "car"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Verify the validity of an array of codes",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "codes": {
+                    "type": "array",
+                    "items": {}
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        }
+      }
+    },
+    "/presigned-s3-url": {
+      "get": {
+        "summary": "Retrieve a presigned url for passing media to PromoVeritas S3",
+        "tags": [
+          "Entrant"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "url"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "url": "example"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-presigned-put-url",
+        "description": "Retrieve a presigned url for passing media to PromoVeritas S3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "filename": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Pass the name of the file plus the extension, so a unique presigned request can be generated."
+        }
+      },
+      "parameters": []
+    },
+    "/entry": {
+      "post": {
+        "tags": [
+          "Entrant"
+        ],
+        "summary": "Submit an entrant's details",
+        "description": "Submit an entrant's details\n\nIn the body of the response, a property; status, is defined. A status of;\n\n-1 indicates a failure to find the promotion (check if the API Key is correct),\n\n-2 indicates the promotion has been set up but is not live (or in test mode),\n\n-4 indicates that there is an error in the fields submitted (feedback is given about corrections)\n 0 indicates we have successfully received the entrant submission",
+        "operationId": "newEntry",
+        "parameters": [],
+        "requestBody": {
+          "description": "A list of submitted fields\n\n\"verification_token\": \"\" must be present\n\nThis allow us to match a verified code array with an entrants details.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "x-examples": {
+                  "example-1": {
+                    "first_name": "Jane",
+                    "last_name": "Doe",
+                    "email": "jane@doe.com",
+                    "verification_token": "93139981-4f3b-42bb-9cb9-1efd27753dd9"
+                  }
+                }
+              },
+              "examples": {
+                "Example": {
+                  "value": {
+                    "first_name": "Jane",
+                    "last_name": "Doe",
+                    "email": "jane@doe.com",
+                    "verification_token": "93139981-4f3b-42bb-9cb9-1efd27753dd9"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully Completed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number"
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "entryId": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message",
+                    "entryId"
+                  ],
+                  "x-examples": {
+                    "example-1": {
+                      "status": 0,
+                      "message": "Non-winner",
+                      "entryId": 10178805
+                    }
+                  }
+                },
+                "examples": {}
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {}
+  }
+}

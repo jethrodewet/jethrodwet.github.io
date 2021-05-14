@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{224:function(n,t,e){n.exports=e.p+"img/kfc-logo.e42df73.png"},226:function(n,t,e){"use strict";e.r(t);var c=e(37),component=Object(c.a)({},(function(){var n=this.$createElement;return(this._self._c||n)("img",{attrs:{src:e(224)}})}),[],!1,null,null,null);t.default=component.exports}}]);

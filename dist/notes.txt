@@ -1,0 +1,6 @@
+Base: https://0ru6ce2o40.execute-api.eu-west-1.amazonaws.com/beta/kfc-holdem
+
+Codes Entry: https://0ru6ce2o40.execute-api.eu-west-1.amazonaws.com/beta/kfc-holdem/verify-codes
+  OP ID: post-verify-codes-codes
+
+Details:
